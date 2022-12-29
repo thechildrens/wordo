@@ -58,6 +58,23 @@
       #73A9AD 9px)
 }
 
+.key.key-BACKSPACE span {
+  display: none;
+}
+
+.key.key-BACKSPACE::after {
+  content: '⌫';
+}
+
+.key.key-ENTER span {
+  display: none;
+}
+
+.key.key-ENTER::after {
+  content: 'Enter';
+}
+
+
 .key.key-active {
   background-color: #efefef;
 }
