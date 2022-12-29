@@ -41,3 +41,23 @@
   margin-right: 3px;
   padding: 9px;
 }
+
+.key.key-A,
+.key.key-E,
+.key.key-I,
+.key.key-O,
+.key.key-U {
+  background-color: #90C8AC;
+}
+
+.key.key-Y {
+  background: repeating-linear-gradient(-45deg,
+      #90C8AC,
+      #90C8AC 5px,
+      #73A9AD 5px,
+      #73A9AD 9px)
+}
+
+.key.key-active {
+  background-color: #efefef;
+}
