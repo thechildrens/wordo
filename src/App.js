@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import seedrandom from 'seedrandom';
 import { useCallback, useEffect, useState } from 'react';
 
 const makeGuesses = () => new Array(6).fill(null).map(row => new Array(5).fill(''))
@@ -42,7 +43,15 @@ const KEY_CODES = {
 }
 
 const WORDLIST = [
-  'SHARK'
+  'SHARK',
+  'TIGER',
+  'SHARE',
+  'SNAKE',
+  'SHAKE',
+  'CHAIR',
+  'SNACK',
+  'SHARP',
+  'TITLE',
 ]
 
 const WORDSET = new Set()
@@ -50,9 +59,21 @@ WORDLIST.forEach(word => {
   WORDSET.add(word)
 })
 
+const D = new Date()
+const RNG = seedrandom(D.toISOString().slice(0, 10))
+const SELECTWORD = () => WORDLIST[Math.floor(RNG() * WORDLIST.length)]
+const TARGET = SELECTWORD().split('')
+const TSET = {}
+TARGET.forEach(letter => {
+  if (!TSET.hasOwnProperty(letter)) {
+    TSET[letter] = 0
+  }
+  TSET[letter] += 1
+})
 function App() {
   const [currRow, setCurrRow] = useState(0)
   const [GUESSES, setGuesses] = useState(makeGuesses)
+  console.log(TARGET, TSET)
 
   useEffect(() => {
     const onkeydown = (evt) => {
@@ -106,7 +127,7 @@ function App() {
 
     return () => {
       window.removeEventListener('keydown', onkeydown)
-      window.removeEventListener('keydown', onkeyup)
+      window.removeEventListener('keyup', onkeyup)
     }
   }, [currRow, setCurrRow, setGuesses])
 
@@ -115,12 +136,34 @@ function App() {
       <table className="wordgrid">
         <tbody>
           {GUESSES.map((guess, i) => {
-            return (
+            const tset = { ...TSET }
+
+            return i >= currRow ? (
               <tr key={i}>
                 {guess.map((cell, j) => {
                   return (
-                    <td key={j} className={`${cell === '' ? '' : 'filled'}`}>
-                      {cell}
+                    <td key={j} className={`${cell === '' ? '' : 'cell-filled'}`}>
+                      <span>
+                        {cell}
+                      </span>
+                    </td>
+                  )
+                })}
+              </tr>
+            ) : (
+              <tr key={i}>
+                {guess.map((cell, j) => {
+                  tset[cell]--
+                  return (
+                    <td key={j} className={
+                      `cell-filled
+                      ${cell === TARGET[j] ? 'cell-correct' : (
+                        (tset.hasOwnProperty(cell) && tset[cell] > -1) ? 'cell-misplaced' : 'cell-wrong'
+                      )}`
+                    }>
+                      <span>
+                        {cell}
+                      </span>
                     </td>
                   )
                 })}
