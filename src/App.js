@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { useCallback, useEffect, useState } from 'react';
 
-const GUESSES = new Array(6).fill(null).map(row => new Array(5).fill(''))
+const makeGuesses = () => new Array(6).fill(null).map(row => new Array(5).fill(''))
 
 const KEYBOARD = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -43,6 +43,7 @@ const KEY_CODES = {
 
 function App() {
   const [currRow, setCurrRow] = useState(0)
+  const [GUESSES, setGuesses] = useState(makeGuesses)
 
   useEffect(() => {
     const onkeydown = (evt) => {
@@ -50,6 +51,30 @@ function App() {
       const vkey = document.getElementsByClassName(`key-${key}`)[0]
       if (vkey == null) return
       vkey.classList.add('key-active')
+      setGuesses(g =>
+        g.map((row, i) => {
+          if (currRow !== i) return row
+
+          const r = row.slice()
+          if (key === 'BACKSPACE') {
+            for (let i = r.length - 1; i >= 0; i--) {
+              if (r[i] !== '') {
+                r[i] = ''
+                break
+              }
+            }
+          } else {
+            for (let i = 0; i < r.length; i++) {
+              if (r[i] === '') {
+                r[i] = key
+                break
+              }
+            }
+          }
+
+          return r
+        })
+      )
     }
     const onkeyup = (evt) => {
       const key = evt.key.toUpperCase()
@@ -65,7 +90,7 @@ function App() {
       window.removeEventListener('keydown', onkeydown)
       window.removeEventListener('keydown', onkeyup)
     }
-  }, [currRow])
+  }, [currRow, setGuesses])
 
   return (
     <div className="App">
@@ -76,7 +101,7 @@ function App() {
               <tr key={i}>
                 {guess.map((cell, j) => {
                   return (
-                    <td key={j}>
+                    <td key={j} className={`${cell === '' ? '' : 'filled'}`}>
                       {cell}
                     </td>
                   )

@@ -13,15 +13,21 @@
 .wordgrid td {
   border: 2px solid #ccc;
   border-radius: 6px;
-  height: 64px;
-  width: 64px;
+  height: 56px;
+  width: 56px;
+  text-align: center;
+  font-size: 28px;
+}
+
+.wordgrid .filled {
+  /* background-color: #C4DFAA; */
 }
 
 .keyboard {
   display: flex;
   flex-direction: column;
   width: 600px;
-  font-size: 28px;
+  font-size: 24px;
 }
 
 .keyboard-row {
@@ -36,10 +42,12 @@
   justify-content: center;
   width: 100%;
   border-radius: 6px;
+  background: none;
   background-color: #73A9AD;
   margin-left: 3px;
   margin-right: 3px;
-  padding: 9px;
+  padding: 12px;
+  color: white;
 }
 
 .key.key-A,
@@ -66,6 +74,11 @@
   content: '⌫';
 }
 
+.key.key-ENTER, .key.key-BACKSPACE {
+  background-color: aliceblue;
+  color: #333;
+}
+
 .key.key-ENTER span {
   display: none;
 }
@@ -76,5 +89,6 @@
 
 
 .key.key-active {
+  background: none;
   background-color: #efefef;
 }
