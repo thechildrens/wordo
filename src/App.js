@@ -41,6 +41,15 @@ const KEY_CODES = {
   'Backspace': 8,
 }
 
+const WORDLIST = [
+  'SHARK'
+]
+
+const WORDSET = new Set()
+WORDLIST.forEach(word => {
+  WORDSET.add(word)
+})
+
 function App() {
   const [currRow, setCurrRow] = useState(0)
   const [GUESSES, setGuesses] = useState(makeGuesses)
@@ -62,6 +71,15 @@ function App() {
                 r[i] = ''
                 break
               }
+            }
+          } else if (key === 'ENTER') {
+            if (currRow < 6) {
+              const word = row.join('')
+              if (WORDSET.has(word)) {
+                setCurrRow(currRow + 1)
+              }
+            } else {
+
             }
           } else {
             for (let i = 0; i < r.length; i++) {
@@ -90,7 +108,7 @@ function App() {
       window.removeEventListener('keydown', onkeydown)
       window.removeEventListener('keydown', onkeyup)
     }
-  }, [currRow, setGuesses])
+  }, [currRow, setCurrRow, setGuesses])
 
   return (
     <div className="App">
