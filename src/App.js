@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import seedrandom from 'seedrandom';
+import { WORDLIST, WORDSET } from './wordlist';
 import { useCallback, useEffect, useState } from 'react';
 
 const makeGuesses = () => new Array(6).fill(null).map(row => new Array(5).fill(''))
@@ -42,23 +43,6 @@ const KEY_CODES = {
   'Backspace': 8,
 }
 
-const WORDLIST = [
-  'SHARK',
-  'TIGER',
-  'SHARE',
-  'SNAKE',
-  'SHAKE',
-  'CHAIR',
-  'SNACK',
-  'SHARP',
-  'TITLE',
-]
-
-const WORDSET = new Set()
-WORDLIST.forEach(word => {
-  WORDSET.add(word)
-})
-
 const D = new Date()
 const RNG = seedrandom(D.toISOString().slice(0, 10))
 const SELECTWORD = () => WORDLIST[Math.floor(RNG() * WORDLIST.length)]
@@ -73,7 +57,6 @@ TARGET.forEach(letter => {
 function App() {
   const [currRow, setCurrRow] = useState(0)
   const [GUESSES, setGuesses] = useState(makeGuesses)
-  console.log(TARGET, TSET)
 
   useEffect(() => {
     const onkeydown = (evt) => {
