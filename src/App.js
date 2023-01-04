@@ -84,6 +84,7 @@ function App() {
   const [currRow, setCurrRow] = useState(loadCurrRow)
   const [guesses, setGuesses] = useState(loadGuesses)
   const [scores, setScores] = useState([])
+  const [agg, setAgg] = useState({})
   const [modalOpen, setModalOpen] = useState(currRow > 5)
 
   const closeModalCb = useCallback(() => {
@@ -92,35 +93,50 @@ function App() {
 
   // compute scores
   useEffect(() => {
+    const a = {}
+
     setScores(s => {
-      const slen = s.length
-      if (currRow <= slen) return s
+      let slen = s.length
+      const newScores = s.slice()
 
-      const guess = guesses[slen]
-      const tset = { ...TSET }
+      while (slen < currRow) {
+        const guess = guesses[slen]
+        if (guess == null) break
 
-      const newScores = [0, 0, 0, 0, 0]
+        const tset = { ...TSET }
+        const newRow = [0, 0, 0, 0, 0]
 
-      guess.forEach((char, i) => {
-        if (char !== TARGET[i]) return
+        // two-pass, first grabs correct tiles
+        guess.forEach((char, i) => {
+          a[char] = 0
+          if (char !== TARGET[i]) return
 
-        tset[char]--
-        newScores[i] = 1
-      })
-
-      guess.forEach((char, i) => {
-        if (newScores[i] === 1) return
-
-        if (tset.hasOwnProperty(char) && tset[char] > 0) {
           tset[char]--
-          newScores[i] = 2
-        }
-      })
+          newRow[i] = a[char] = 2
+        })
 
-      return [
-        ...s,
-        newScores,
-      ]
+        // second pass grabs misplaced
+        guess.forEach((char, i) => {
+          if (newRow[i] === 2) return
+
+          if (tset.hasOwnProperty(char) && tset[char] > 0) {
+            tset[char]--
+            newRow[i] = 1
+            a[char] = Math.max(a[char], 1)
+          }
+        })
+        newScores.push(newRow)
+        slen++
+      }
+
+      return newScores
+    })
+
+    setAgg(agg => {
+      for (let k in agg) {
+        a[k] = Math.max(a[k] || 0, agg[k])
+      }
+      return a
     })
   }, [currRow, setScores])
 
@@ -220,7 +236,7 @@ function App() {
             </span>
             <img src="/lose.jpg" />
             <span>
-              Better luck next time!
+              Better luck tomorrow!
             </span>
           </div>
         )}
@@ -268,7 +284,7 @@ function App() {
             <div className="keyboard-row" key={row[0]}>
               {row.map((key) => {
                 return <div
-                  className={`key key-${key}`}
+                  className={`key key-${key} key-${agg[key]}`}
                   key={key}
                   data-key={key}
                   onClick={onkeydown}>

@@ -29,7 +29,7 @@
   /* background-color: #C4DFAA; */
 }
 
-.wordgrid .cell-1 {
+.wordgrid .cell-2 {
   background-color: #5fc464;
 }
 
@@ -37,7 +37,7 @@
   background-color: rgb(243, 234, 193);
 }
 
-.wordgrid .cell-2 {
+.wordgrid .cell-1 {
   background-color: #ffe866;
 }
 
@@ -69,6 +69,21 @@
   cursor: pointer;
   transition: background-color 0.1s, color 0.1s;
 }
+
+.key-2 {
+  background-color: #5fc464 !important;
+}
+
+.key-0 {
+  background: none !important;
+  background-color: rgb(243, 234, 193) !important;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.key-1 {
+  background-color: #ffe866 !important;
+}
+
 
 .key>span {
   pointer-events: none;
