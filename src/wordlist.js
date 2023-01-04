@@ -55,7 +55,6 @@ export const WORDLIST = [
   'CHIPS',
   'GUAVA',
   'PEACH',
-  'BERRY',
   'PIZZA',
   'DRINK',
   'GRAPE',
@@ -260,7 +259,11 @@ export const WORDLIST = [
   'WRONG',
 
   'LAUGH',
+  'PARTY',
+  'STARS',
 ]
+
+// TODO: fix double letter guesses, RULER -> UNDER
 
 export const WORDSET = new Set()
 WORDLIST.forEach(word => {

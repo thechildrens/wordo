@@ -14,6 +14,7 @@ const KEYBOARD = [
 
 const D = new Date()
 const DSTRING = D.toISOString().slice(0, 10)
+// const DSTRING = '2023-12-25'
 const RNG = seedrandom(DSTRING)
 const SELECTWORD = () => WORDLIST[Math.floor(RNG() * WORDLIST.length)]
 
@@ -82,11 +83,46 @@ function loadGuesses() {
 function App() {
   const [currRow, setCurrRow] = useState(loadCurrRow)
   const [guesses, setGuesses] = useState(loadGuesses)
+  const [scores, setScores] = useState([])
   const [modalOpen, setModalOpen] = useState(currRow > 5)
 
   const closeModalCb = useCallback(() => {
     setModalOpen(false)
   }, [setModalOpen])
+
+  // compute scores
+  useEffect(() => {
+    setScores(s => {
+      const slen = s.length
+      if (currRow <= slen) return s
+
+      const guess = guesses[slen]
+      const tset = { ...TSET }
+
+      const newScores = [0, 0, 0, 0, 0]
+
+      guess.forEach((char, i) => {
+        if (char !== TARGET[i]) return
+
+        tset[char]--
+        newScores[i] = 1
+      })
+
+      guess.forEach((char, i) => {
+        if (newScores[i] === 1) return
+
+        if (tset.hasOwnProperty(char) && tset[char] > 0) {
+          tset[char]--
+          newScores[i] = 2
+        }
+      })
+
+      return [
+        ...s,
+        newScores,
+      ]
+    })
+  }, [currRow, setScores])
 
   const onkeydown = useCallback((evt) => {
     const clicked = !evt.key
@@ -168,12 +204,24 @@ function App() {
     <div className="App">
       <Modal open={modalOpen} closeCb={closeModalCb}>
         {currRow === 7 ? (
-          <div>You win! I am proud of you!
+          <div>
+            <span>
+              You win!
+            </span>
             <img src="/win.jpg" />
+            <span>
+              I am so proud of you.
+            </span>
           </div>
         ) : (
-          <div>You lose! Try again tomorrow!
+          <div>
+            <span>
+              You lose!
+            </span>
             <img src="/lose.jpg" />
+            <span>
+              Better luck next time!
+            </span>
           </div>
         )}
       </Modal>
@@ -184,9 +232,7 @@ function App() {
         <table className="wordgrid prevent-select">
           <tbody>
             {guesses.map((guess, i) => {
-              const tset = { ...TSET }
-
-              return i >= currRow ? (
+              return i >= scores.length ? (
                 <tr key={i}>
                   {guess.map((cell, j) => {
                     return (
@@ -201,14 +247,8 @@ function App() {
               ) : (
                 <tr key={i}>
                   {guess.map((cell, j) => {
-                    tset[cell]--
                     return (
-                      <td key={j} className={
-                        `cell-filled
-                      ${cell === TARGET[j] ? 'cell-correct' : (
-                          (tset.hasOwnProperty(cell) && tset[cell] > -1) ? 'cell-misplaced' : 'cell-wrong'
-                        )}`
-                      }>
+                      <td key={j} className={`cell-filled cell-${scores[i][j]}`}>
                         <span>
                           {cell}
                         </span>

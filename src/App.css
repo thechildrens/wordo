@@ -29,15 +29,15 @@
   /* background-color: #C4DFAA; */
 }
 
-.wordgrid .cell-correct {
+.wordgrid .cell-1 {
   background-color: #5fc464;
 }
 
-.wordgrid .cell-wrong {
+.wordgrid .cell-0 {
   background-color: rgb(243, 234, 193);
 }
 
-.wordgrid .cell-misplaced {
+.wordgrid .cell-2 {
   background-color: #ffe866;
 }
 
@@ -154,14 +154,19 @@
 
 .modal-content {
   font-size: 28px;
+  height: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 18px;
   text-align: center;
 }
 
+.modal-content>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .modal-content img {
-  margin-top: 24px;
   width: 100%;
   border-radius: 8px;
 }
