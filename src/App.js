@@ -13,8 +13,8 @@ const KEYBOARD = [
 ]
 
 const D = new Date()
-const DSTRING = D.toISOString().slice(0, 10)
-// const DSTRING = '2023-12-25'
+// const DSTRING = D.toISOString().slice(0, 10)
+const DSTRING = '2023-12-23'
 const RNG = seedrandom(DSTRING)
 const SELECTWORD = () => WORDLIST[Math.floor(RNG() * WORDLIST.length)]
 
@@ -61,21 +61,26 @@ function Alert({ children }) {
 }
 
 function save(guesses, currRow) {
-  localStorage.setItem(`${DSTRING}-guesses`, JSON.stringify(guesses))
-  localStorage.setItem(`${DSTRING}-currrow`, currRow)
+  localStorage.setItem(`guesses`, JSON.stringify(guesses))
+  localStorage.setItem(`currrow`, currRow)
+  localStorage.setItem(`date`, DSTRING)
 }
 
 function loadCurrRow() {
-  return +localStorage.getItem(`${DSTRING}-currrow`)
+  if (localStorage.getItem('date') !== DSTRING) return 0
+
+  return +localStorage.getItem(`currrow`)
 }
 
 function loadGuesses() {
-  const guessdata = localStorage.getItem(`${DSTRING}-guesses`)
+  if (localStorage.getItem('date') !== DSTRING) return makeGuesses()
+
+  const guessdata = localStorage.getItem(`guesses`)
   let guesses
   if (guessdata) {
-    guesses = JSON.parse(guessdata)
+    return JSON.parse(guessdata)
   } else {
-    guesses = makeGuesses()
+    return makeGuesses()
   }
   return guesses
 }
