@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/wordo/static/css/main.e7a01282.css",
-    "main.js": "/wordo/static/js/main.55645a47.js",
+    "main.js": "/wordo/static/js/main.78845c0c.js",
     "static/js/787.14498191.chunk.js": "/wordo/static/js/787.14498191.chunk.js",
     "static/media/logo.svg": "/wordo/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/wordo/index.html",
     "main.e7a01282.css.map": "/wordo/static/css/main.e7a01282.css.map",
-    "main.55645a47.js.map": "/wordo/static/js/main.55645a47.js.map",
+    "main.78845c0c.js.map": "/wordo/static/js/main.78845c0c.js.map",
     "787.14498191.chunk.js.map": "/wordo/static/js/787.14498191.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e7a01282.css",
-    "static/js/main.55645a47.js"
+    "static/js/main.78845c0c.js"
   ]
 }
