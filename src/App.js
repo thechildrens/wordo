@@ -46,6 +46,7 @@ const KEY_CODES = {
 const D = new Date()
 const RNG = seedrandom(D.toISOString().slice(0, 10))
 const SELECTWORD = () => WORDLIST[Math.floor(RNG() * WORDLIST.length)]
+
 const TARGET = SELECTWORD().split('')
 const TSET = {}
 TARGET.forEach(letter => {
@@ -54,9 +55,43 @@ TARGET.forEach(letter => {
   }
   TSET[letter] += 1
 })
+
+
+function Close({ onClick }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" className="close-icon"
+      onClick={onClick}
+    >
+      <path fill="#currentColor"
+        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
+      </path>
+    </svg>
+  )
+}
+
+function Modal({ open, closeCb, children }) {
+  return (
+    <div className={`backdrop ${open ? 'open' : ''}`} onClick={closeCb}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <Close onClick={closeCb} />
+        <div className="modal-content">{children}</div>
+      </div>
+    </div>
+  )
+}
+
+function Alert() {
+
+}
+
 function App() {
   const [currRow, setCurrRow] = useState(0)
   const [GUESSES, setGuesses] = useState(makeGuesses)
+  const [modalOpen, setModalOpen] = useState(true)
+
+  const closeModalCb = useCallback(() => {
+    setModalOpen(false)
+  }, [setModalOpen])
 
   const onkeydown = useCallback((evt) => {
     const clicked = !evt.key
@@ -117,6 +152,9 @@ function App() {
 
   return (
     <div className="App">
+      <Modal open={modalOpen} closeCb={closeModalCb}>
+        You win!
+      </Modal>
       <table className="wordgrid prevent-select">
         <tbody>
           {GUESSES.map((guess, i) => {
