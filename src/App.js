@@ -224,7 +224,7 @@ function App() {
             <span>
               You win!
             </span>
-            <img src="/win.jpg" />
+            <img src="win.jpg" />
             <span>
               I am so proud of you.
             </span>
@@ -234,7 +234,7 @@ function App() {
             <span>
               You lose!
             </span>
-            <img src="/lose.jpg" />
+            <img src="lose.jpg" />
             <span>
               Better luck tomorrow!
             </span>
