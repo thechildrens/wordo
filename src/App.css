@@ -65,6 +65,11 @@
   margin-right: 3px;
   padding: 8px 12px;
   color: white;
+  cursor: pointer;
+}
+
+.key>span {
+  pointer-events: none;
 }
 
 .key.key-A,
@@ -108,4 +113,18 @@
 .key.key-active {
   background: none;
   background-color: #efefef;
+}
+
+.key:active {
+  background: none;
+  background-color: #efefef;
+}
+
+.prevent-select {
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
 }

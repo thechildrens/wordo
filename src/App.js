@@ -58,46 +58,47 @@ function App() {
   const [currRow, setCurrRow] = useState(0)
   const [GUESSES, setGuesses] = useState(makeGuesses)
 
-  useEffect(() => {
-    const onkeydown = (evt) => {
-      const key = evt.key.toUpperCase()
-      const vkey = document.getElementsByClassName(`key-${key}`)[0]
-      if (vkey == null) return
+  const onkeydown = useCallback((evt) => {
+    const clicked = !evt.key
+    const key = (evt.key || evt.target.dataset.key).toUpperCase()
+    const vkey = document.getElementsByClassName(`key-${key}`)[0]
+    if (vkey == null) return
+    if (!clicked) {
       vkey.classList.add('key-active')
-      setGuesses(g =>
-        g.map((row, i) => {
-          if (currRow !== i) return row
+    }
+    setGuesses(g =>
+      g.map((row, i) => {
+        if (currRow !== i) return row
 
-          const r = row.slice()
-          if (key === 'BACKSPACE') {
-            for (let i = r.length - 1; i >= 0; i--) {
-              if (r[i] !== '') {
-                r[i] = ''
-                break
-              }
-            }
-          } else if (key === 'ENTER') {
-            if (currRow < 6) {
-              const word = row.join('')
-              if (WORDSET.has(word)) {
-                setCurrRow(currRow + 1)
-              }
-            } else {
-
-            }
-          } else {
-            for (let i = 0; i < r.length; i++) {
-              if (r[i] === '') {
-                r[i] = key
-                break
-              }
+        const r = row.slice()
+        if (key === 'BACKSPACE') {
+          for (let i = r.length - 1; i >= 0; i--) {
+            if (r[i] !== '') {
+              r[i] = ''
+              break
             }
           }
+        } else if (key === 'ENTER') {
+          const word = row.join('')
+          if (WORDSET.has(word)) {
 
-          return r
-        })
-      )
-    }
+            setCurrRow(currRow + 1)
+          }
+        } else {
+          for (let i = 0; i < r.length; i++) {
+            if (r[i] === '') {
+              r[i] = key
+              break
+            }
+          }
+        }
+
+        return r
+      })
+    )
+  }, [currRow, setCurrRow, setGuesses])
+
+  useEffect(() => {
     const onkeyup = (evt) => {
       const key = evt.key.toUpperCase()
       const vkey = document.getElementsByClassName(`key-${key}`)[0]
@@ -112,11 +113,11 @@ function App() {
       window.removeEventListener('keydown', onkeydown)
       window.removeEventListener('keyup', onkeyup)
     }
-  }, [currRow, setCurrRow, setGuesses])
+  }, [onkeydown])
 
   return (
     <div className="App">
-      <table className="wordgrid">
+      <table className="wordgrid prevent-select">
         <tbody>
           {GUESSES.map((guess, i) => {
             const tset = { ...TSET }
@@ -155,12 +156,16 @@ function App() {
           })}
         </tbody>
       </table>
-      <div className="keyboard">
+      <div className="keyboard prevent-select">
         {KEYBOARD.map(row => {
           return (
             <div className="keyboard-row" key={row[0]}>
               {row.map((key) => {
-                return <div className={`key key-${key}`} key={key}>
+                return <div
+                  className={`key key-${key}`}
+                  key={key}
+                  data-key={key}
+                  onClick={onkeydown}>
                   <span>
                     {key}
                   </span>

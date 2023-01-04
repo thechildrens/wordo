@@ -258,6 +258,8 @@ export const WORDLIST = [
   'BRAVE',
   'QUICK',
   'WRONG',
+
+  'LAUGH',
 ]
 
 export const WORDSET = new Set()
