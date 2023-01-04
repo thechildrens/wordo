@@ -47,7 +47,8 @@ const D = new Date()
 const RNG = seedrandom(D.toISOString().slice(0, 10))
 const SELECTWORD = () => WORDLIST[Math.floor(RNG() * WORDLIST.length)]
 
-const TARGET = SELECTWORD().split('')
+const TARGETWORD = SELECTWORD()
+const TARGET = TARGETWORD.split('')
 const TSET = {}
 TARGET.forEach(letter => {
   if (!TSET.hasOwnProperty(letter)) {
@@ -80,8 +81,12 @@ function Modal({ open, closeCb, children }) {
   )
 }
 
-function Alert() {
-
+function Alert({ children }) {
+  return (
+    <div className="alert shown">
+      {children}
+    </div>
+  )
 }
 
 function App() {
@@ -115,10 +120,21 @@ function App() {
           }
         } else if (key === 'ENTER') {
           const word = row.join('')
-          if (WORDSET.has(word)) {
 
+          if (word === TARGETWORD) {
             setCurrRow(currRow + 1)
+            setModalOpen(true)
+          } else if (WORDSET.has(word)) {
+            setCurrRow(currRow + 1)
+          } else {
+            const alertEl = document.getElementsByClassName('alert')[0]
+
+            // reset animation
+            alertEl.classList.remove('shown')
+            void alertEl.offsetWidth
+            alertEl.classList.add('shown')
           }
+
         } else {
           for (let i = 0; i < r.length; i++) {
             if (r[i] === '') {
@@ -155,45 +171,51 @@ function App() {
       <Modal open={modalOpen} closeCb={closeModalCb}>
         You win!
       </Modal>
-      <table className="wordgrid prevent-select">
-        <tbody>
-          {GUESSES.map((guess, i) => {
-            const tset = { ...TSET }
+      <div className="wordgrid-container">
+        <Alert>
+          Word not found!
+        </Alert>
+        <table className="wordgrid prevent-select">
+          <tbody>
+            {GUESSES.map((guess, i) => {
+              const tset = { ...TSET }
 
-            return i >= currRow ? (
-              <tr key={i}>
-                {guess.map((cell, j) => {
-                  return (
-                    <td key={j} className={`${cell === '' ? '' : 'cell-filled'}`}>
-                      <span>
-                        {cell}
-                      </span>
-                    </td>
-                  )
-                })}
-              </tr>
-            ) : (
-              <tr key={i}>
-                {guess.map((cell, j) => {
-                  tset[cell]--
-                  return (
-                    <td key={j} className={
-                      `cell-filled
+              return i >= currRow ? (
+                <tr key={i}>
+                  {guess.map((cell, j) => {
+                    return (
+                      <td key={j} className={`${cell === '' ? '' : 'cell-filled'}`}>
+                        <span>
+                          {cell}
+                        </span>
+                      </td>
+                    )
+                  })}
+                </tr>
+              ) : (
+                <tr key={i}>
+                  {guess.map((cell, j) => {
+                    tset[cell]--
+                    return (
+                      <td key={j} className={
+                        `cell-filled
                       ${cell === TARGET[j] ? 'cell-correct' : (
-                        (tset.hasOwnProperty(cell) && tset[cell] > -1) ? 'cell-misplaced' : 'cell-wrong'
-                      )}`
-                    }>
-                      <span>
-                        {cell}
-                      </span>
-                    </td>
-                  )
-                })}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+                          (tset.hasOwnProperty(cell) && tset[cell] > -1) ? 'cell-misplaced' : 'cell-wrong'
+                        )}`
+                      }>
+                        <span>
+                          {cell}
+                        </span>
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+
+      </div>
       <div className="keyboard prevent-select">
         {KEYBOARD.map(row => {
           return (
