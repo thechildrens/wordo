@@ -167,7 +167,15 @@ function App() {
   return (
     <div className="App">
       <Modal open={modalOpen} closeCb={closeModalCb}>
-        {currRow === 7 ? 'You win!' : 'You lose!'}
+        {currRow === 7 ? (
+          <div>You win! I am proud of you!
+            <img src="/win.jpg" />
+          </div>
+        ) : (
+          <div>You lose! Try again tomorrow!
+            <img src="/lose.jpg" />
+          </div>
+        )}
       </Modal>
       <div className="wordgrid-container">
         <Alert>
