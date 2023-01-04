@@ -12,39 +12,9 @@ const KEYBOARD = [
   ['BACKSPACE', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'ENTER'],
 ]
 
-const KEY_CODES = {
-  'A': 97,
-  'B': 98,
-  'C': 99,
-  'D': 100,
-  'E': 101,
-  'F': 102,
-  'G': 103,
-  'H': 104,
-  'I': 105,
-  'J': 106,
-  'K': 107,
-  'L': 108,
-  'M': 109,
-  'N': 110,
-  'O': 111,
-  'P': 112,
-  'Q': 113,
-  'R': 114,
-  'S': 115,
-  'T': 116,
-  'U': 117,
-  'V': 118,
-  'W': 119,
-  'X': 120,
-  'Y': 121,
-  'Z': 122,
-  'Enter': 13,
-  'Backspace': 8,
-}
-
 const D = new Date()
-const RNG = seedrandom(D.toISOString().slice(0, 10))
+const DSTRING = D.toISOString().slice(0, 10)
+const RNG = seedrandom(DSTRING)
 const SELECTWORD = () => WORDLIST[Math.floor(RNG() * WORDLIST.length)]
 
 const TARGETWORD = SELECTWORD()
@@ -83,16 +53,36 @@ function Modal({ open, closeCb, children }) {
 
 function Alert({ children }) {
   return (
-    <div className="alert shown">
+    <div className="alert">
       {children}
     </div>
   )
 }
 
+function save(guesses, currRow) {
+  localStorage.setItem(`${DSTRING}-guesses`, JSON.stringify(guesses))
+  localStorage.setItem(`${DSTRING}-currrow`, currRow)
+}
+
+function loadCurrRow() {
+  return +localStorage.getItem(`${DSTRING}-currrow`)
+}
+
+function loadGuesses() {
+  const guessdata = localStorage.getItem(`${DSTRING}-guesses`)
+  let guesses
+  if (guessdata) {
+    guesses = JSON.parse(guessdata)
+  } else {
+    guesses = makeGuesses()
+  }
+  return guesses
+}
+
 function App() {
-  const [currRow, setCurrRow] = useState(0)
-  const [GUESSES, setGuesses] = useState(makeGuesses)
-  const [modalOpen, setModalOpen] = useState(true)
+  const [currRow, setCurrRow] = useState(loadCurrRow)
+  const [guesses, setGuesses] = useState(loadGuesses)
+  const [modalOpen, setModalOpen] = useState(currRow > 5)
 
   const closeModalCb = useCallback(() => {
     setModalOpen(false)
@@ -122,10 +112,18 @@ function App() {
           const word = row.join('')
 
           if (word === TARGETWORD) {
-            setCurrRow(currRow + 1)
+            // set win status
+            setCurrRow(7)
             setModalOpen(true)
+            save(g, 7)
           } else if (WORDSET.has(word)) {
+
+            if (currRow >= 5) {
+              setModalOpen(true)
+            }
+            // set next row
             setCurrRow(currRow + 1)
+            save(g, currRow + 1)
           } else {
             const alertEl = document.getElementsByClassName('alert')[0]
 
@@ -169,7 +167,7 @@ function App() {
   return (
     <div className="App">
       <Modal open={modalOpen} closeCb={closeModalCb}>
-        You win!
+        {currRow === 7 ? 'You win!' : 'You lose!'}
       </Modal>
       <div className="wordgrid-container">
         <Alert>
@@ -177,7 +175,7 @@ function App() {
         </Alert>
         <table className="wordgrid prevent-select">
           <tbody>
-            {GUESSES.map((guess, i) => {
+            {guesses.map((guess, i) => {
               const tset = { ...TSET }
 
               return i >= currRow ? (
