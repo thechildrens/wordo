@@ -12,8 +12,8 @@ const KEYBOARD = [
 ]
 
 const D = new Date()
-// const DSTRING = D.toISOString().slice(0, 10)
-const DSTRING = '2023-12-23'
+const DSTRING = D.toISOString().slice(0, 10)
+// const DSTRING = '2023-12-23'
 const RNG = seedrandom(DSTRING)
 const SELECTWORD = () => WORDLIST[Math.floor(RNG() * WORDLIST.length)]
 
