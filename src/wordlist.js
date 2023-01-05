@@ -272,6 +272,8 @@ WORDLIST.forEach(word => {
 })
 
 export const DICTIONARY = new Set([
+  'CRANE',
+  'SLOTH',
   'BERRY',
   'STEAK',
   'BREAK',
@@ -284,6 +286,9 @@ export const DICTIONARY = new Set([
   'GLIDE',
   'STEAM',
   'CREAM',
+
+  'BRIAN',
+  'JAMES',
 
   'BAKED',
   'BEAMS',
