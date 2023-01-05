@@ -1,6 +1,6 @@
 import './App.css';
 import seedrandom from 'seedrandom';
-import { WORDLIST, WORDSET } from './wordlist';
+import { DICTIONARY, WORDLIST, WORDSET } from './wordlist';
 import { useCallback, useEffect, useState } from 'react';
 
 const makeGuesses = () => new Array(6).fill(null).map(row => new Array(5).fill(''))
@@ -172,8 +172,7 @@ function App() {
             setCurrRow(7)
             setModalOpen(true)
             save(g, 7)
-          } else if (WORDSET.has(word)) {
-
+          } else if (WORDSET.has(word) || DICTIONARY.has(word)) {
             if (currRow >= 5) {
               setModalOpen(true)
             }

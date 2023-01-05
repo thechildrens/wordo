@@ -271,6 +271,30 @@ WORDLIST.forEach(word => {
   WORDSET.add(word)
 })
 
+export const DICTIONARY = new Set([
+  'BERRY',
+  'STEAK',
+  'BREAK',
+  'STAKE',
+  'SLAKE',
+  'SLEAK',
+  'SNEAK',
+  'WREAK',
+  'CHEEK',
+  'GLIDE',
+  'STEAM',
+  'CREAM',
+
+  'BAKED',
+  'BEAMS',
+  'TEAMS',
+  'BEAKS',
+  'RIDES',
+  'LAKES',
+  'LANES',
+  'SHOPS',
+])
+
 // Unused currently
 const KEY_CODES = {
   'A': 97,
