@@ -289,6 +289,9 @@ export const DICTIONARY = new Set([
 
   'BRIAN',
   'JAMES',
+  'HENRY',
+  'BONES',
+  'HURRY',
 
   'BAKED',
   'BEAMS',

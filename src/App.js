@@ -13,7 +13,7 @@ const KEYBOARD = [
 
 const D = new Date()
 const DSTRING = D.toISOString().slice(0, 10)
-// const DSTRING = '2023-12-23'
+// const DSTRING = '2023-12-19'
 const RNG = seedrandom(DSTRING)
 const SELECTWORD = () => WORDLIST[Math.floor(RNG() * WORDLIST.length)]
 
@@ -227,7 +227,7 @@ function App() {
             <span>
               You win!
             </span>
-            <img src="win.jpg" />
+            <img src={process.env.PUBLIC_URL + '/win.jpg'} />
             <span>
               I am so proud of you.
             </span>
@@ -237,7 +237,7 @@ function App() {
             <span>
               You lose!
             </span>
-            <img src="lose.jpg" />
+            <img src={process.env.PUBLIC_URL + '/lose.jpg'} />
             <span>
               Better luck tomorrow!
             </span>
