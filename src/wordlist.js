@@ -301,6 +301,11 @@ export const DICTIONARY = new Set([
   'LAKES',
   'LANES',
   'SHOPS',
+
+  'CAMEL',
+  'SHAME',
+  'FLAME',
+  'MAPLE',
 ])
 
 // Unused currently
